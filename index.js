@@ -6,7 +6,7 @@ const { token } = require("./config");
 // Initialize a global map to store roles
 global.roleMap = new Map();
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
 
 client.commands = new Collection();
 

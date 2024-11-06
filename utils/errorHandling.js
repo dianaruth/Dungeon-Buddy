@@ -1,5 +1,3 @@
-const { errorTable } = require("./loadDb");
-
 async function processError(error, interaction) {
     console.log(error);
     let errorName = "";
@@ -26,22 +24,6 @@ async function processError(error, interaction) {
             components: [],
         });
     }
-
-    // Send the error to the database
-    await errorTable.create({
-        error_name: errorName || error.name,
-        error_message: error.message,
-        user_id: interaction.user.id,
-    });
-}
-
-async function processSendEmbedError(error, reason, userId) {
-    // Send the error to the database
-    await errorTable.create({
-        error_name: reason,
-        error_message: error.message,
-        user_id: userId,
-    });
 }
 
 let deleteTimeouts = new Map();
@@ -75,4 +57,4 @@ async function createStatusEmbed(statusMessage, embedMessage) {
     deleteTimeouts.set(embedMessage.id, timeout);
 }
 
-module.exports = { processError, processSendEmbedError, createStatusEmbed };
+module.exports = { processError, createStatusEmbed };

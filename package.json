@@ -1,9 +1,26 @@
 {
+    "name": "dungeon-buddy",
+    "version": "1.0.0",
+    "description": "a fork of KieranChambers/Dungeon-Buddy, all code credit to the NoPressure EU discord",
+    "engines": {
+        "node": ">=18.x"
+    },
+    "scripts": {
+        "start": "node app.js",
+        "register": "node deploy-commands.js",
+        "dev": "nodemon app.js"
+    },
     "dependencies": {
-        "main": "index.js",
+        "@npmcli/fs": "^4.0.0",
+        "discord-interactions": "^4.0.0",
         "discord.js": "^14.14.1",
-        "dotenv": "^16.3.1",
-        "sequelize": "^6.35.1",
-        "sqlite3": "^5.1.6"
+        "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.1",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-n": "^16.6.2",
+        "eslint-plugin-promise": "^6.6.0"
     }
 }
