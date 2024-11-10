@@ -60,7 +60,8 @@ module.exports = {
 
         // Parse key levels from the channel name
         const currentChannel = interaction.channel;
-        const channelName = currentChannel.name;
+        // const channelName = currentChannel.name;
+        channelName = "m0-to-m4"
         const channelNameSplit = channelName.split("-");
         console.log(channelName);
         const isSingularKeyLevel = channelNameSplit.length === 1;
@@ -338,7 +339,7 @@ module.exports = {
                         });
 
                         await i.update({
-                            content: `**Please ensure applying members are __from NoP__ and __use the passphrase__ in-game!**\nThe passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\``,
+                            content: `**Please ensure applying members are __from ${interaction.guild.name}__ and __use the passphrase__ in-game!**\nThe passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\``,
                             components: [],
                         });
 

@@ -71,7 +71,7 @@ function generateListedAsString(dungeon) {
     const dungeonAcronym = dungeonData[dungeon].acronym;
     const randomLetterPair = generateRandomLetterPair();
 
-    return `NoP ${dungeonAcronym} ${randomLetterPair}`;
+    return `TWR ${dungeonAcronym} ${randomLetterPair}`;
 }
 
 function generatePassphrase(wordList, wordCount = 3) {
@@ -92,27 +92,28 @@ function parseRolesToTag(difficulty, requiredComposition, guildId) {
     // Extract unique roles from the requiredComposition list
     const uniqueRoles = [...new Set(requiredComposition)];
 
-    let roleDifficultyString = "";
+    // TODO: add channel level-specific roles to tag
+    // let roleDifficultyString = "";
 
-    if (difficulty == "M0") {
-        roleDifficultyString = "-M0";
-    } else if (difficulty < 4) {
-        roleDifficultyString = "-M2-3";
-    } else if (difficulty < 7) {
-        roleDifficultyString = "-M4-6";
-    } else if (difficulty < 10) {
-        roleDifficultyString = "-M7-9";
-    } else {
-        roleDifficultyString = "-M10";
-    }
+    // if (difficulty == "M0") {
+    //     roleDifficultyString = "-M0";
+    // } else if (difficulty < 4) {
+    //     roleDifficultyString = "-M2-3";
+    // } else if (difficulty < 7) {
+    //     roleDifficultyString = "-M4-6";
+    // } else if (difficulty < 10) {
+    //     roleDifficultyString = "-M7-9";
+    // } else {
+    //     roleDifficultyString = "-M10";
+    // }
 
     const globalRoles = global.roleMap.get(guildId);
 
     const rolesToTag = [];
 
     for (const role of uniqueRoles) {
-        const roleId = globalRoles.get(`${role}${roleDifficultyString}`);
-        rolesToTag.push(`${roleId}`);
+        const roleId = globalRoles.get(role);
+        rolesToTag.push(roleId);
     }
     const roleMentions = rolesToTag.map((roleId) => `<@&${roleId}>`).join(" ");
 
