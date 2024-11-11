@@ -7,10 +7,9 @@ const {
     removeUserFromRole,
     sendCancelMessage,
 } = require("./utilFunctions");
-const { dungeonInstanceTable, interactionStatusTable } = require("./loadDb");
 const { processDungeonEmbed, getDungeonObject, getDungeonButtonRow, changeGroup } = require("./dungeonLogic");
 const { processSendEmbedError, createStatusEmbed } = require("./errorHandling");
-const { dungeonData, currentExpansion, currentSeason } = require("./loadJson.js");
+const { dungeonData } = require("./loadJson.js");
 
 async function sendEmbed(mainObject, channel, requiredCompositionList) {
     const { dungeonName, dungeonDifficulty } = mainObject.embedData;
@@ -124,7 +123,7 @@ async function sendEmbed(mainObject, channel, requiredCompositionList) {
             } else {
                 let contentMessage;
                 if (discordUserId === interactionUserId) {
-                    contentMessage = `The passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\`\nLook out for NoP members applying with this in-game!`;
+                    contentMessage = `The passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\`\nLook out for ${interaction.guild.name} members applying with this in-game!`;
                 } else {
                     contentMessage = `The passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\`\nAdd this to your note when applying to \`${mainObject.embedData.listedAs}\` in-game!`;
                 }
@@ -164,52 +163,15 @@ async function sendEmbed(mainObject, channel, requiredCompositionList) {
         if (reason === "time") {
             try {
                 await createStatusEmbed("Group creation timed out! (30 mins have passed).", sentEmbed);
-                // Update the interaction status to "timed out"
-                await interactionStatusTable.update(
-                    { interaction_status: "timeoutAfterCreation" },
-                    { where: { interaction_id: mainObject.interactionId } }
-                );
 
                 // Send group timeout message to the group members
                 await sendCancelMessage(channel, mainObject, "timed out");
             } catch (e) {
                 processSendEmbedError(e, "Group creation timeout error", interactionUserId);
             }
-        } else if (reason === "finished") {
-            // Send the finished dungeon data to the database
-            try {
-                await dungeonInstanceTable.create({
-                    dungeon_name: mainObject.embedData.dungeonName,
-                    dungeon_difficulty: mainObject.embedData.dungeonDifficulty,
-                    timed_completed: mainObject.embedData.timeOrCompletion, // TODO: Change this to new names
-                    passphrase: mainObject.utils.passphrase.phrase,
-                    interaction_user: mainObject.interactionUser.userId,
-                    user_chosen_role: mainObject.interactionUser.userChosenRole,
-                    tank: mainObject.roles.Tank.spots[0],
-                    healer: mainObject.roles.Healer.spots[0],
-                    dps: mainObject.roles.DPS.spots[0],
-                    dps2: mainObject.roles.DPS.spots[1],
-                    dps3: mainObject.roles.DPS.spots[2],
-                    expansion: currentExpansion,
-                    season: currentSeason,
-                });
-
-                // Update the interaction status to "finished" in the database
-                await interactionStatusTable.update(
-                    { interaction_status: "finished" },
-                    { where: { interaction_id: mainObject.interactionId } }
-                );
-            } catch (e) {
-                processSendEmbedError(e, "Finished processing error", interactionUserId);
-            }
         } else if (reason === "cancelledAfterCreation") {
             // Update the embed to reflect the cancellation
             try {
-                // Update the interaction status to "cancelled" in the database
-                await interactionStatusTable.update(
-                    { interaction_status: "cancelledAfterCreation" },
-                    { where: { interaction_id: mainObject.interactionId } }
-                );
 
                 // Send a message to the group members that the group has been cancelled
                 await sendCancelMessage(channel, mainObject, "cancelled by group creator");

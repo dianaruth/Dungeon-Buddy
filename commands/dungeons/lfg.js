@@ -11,7 +11,6 @@ const { getMainObject } = require("../../utils/getMainObject");
 const { stripListedAsNumbers, isDPSRole } = require("../../utils/utilFunctions");
 const { getEligibleComposition } = require("../../utils/dungeonLogic");
 const { sendEmbed } = require("../../utils/sendEmbed");
-const { interactionStatusTable } = require("../../utils/loadDb");
 const { processError, createStatusEmbed } = require("../../utils/errorHandling");
 
 module.exports = {
@@ -61,11 +60,13 @@ module.exports = {
 
         // Parse key levels from the channel name
         const currentChannel = interaction.channel;
-        const channelName = currentChannel.name;
+        // const channelName = currentChannel.name;
+        channelName = "m0-to-m4"
         const channelNameSplit = channelName.split("-");
-        const isSingularKeyLevel = channelNameSplit.length === 2;
+        console.log(channelName);
+        const isSingularKeyLevel = channelNameSplit.length === 1;
 
-        const lowerDifficultyRange = parseInt(channelNameSplit[1].replace("m", ""));
+        const lowerDifficultyRange = parseInt(channelNameSplit[0].replace("m", ""));
 
         let upperDifficultyRange;
         if (isSingularKeyLevel) {
@@ -82,6 +83,8 @@ module.exports = {
         for (let i = lowerDifficultyRange; i <= upperDifficultyRange; i++) {
             dungeonDifficultyRanges.push(i);
         }
+
+        console.log(dungeonDifficultyRanges);
 
         function getSelectDifficultyRow(difficultyPlaceholder) {
             const getSelectDifficulty = new StringSelectMenuBuilder()
@@ -211,7 +214,7 @@ module.exports = {
             const dungeonResponse = await interaction.reply({
                 content: messageContent,
                 ephemeral: true,
-                components: [difficultyRow, timeCompletionRow, userRoleRow, eligibleCompositionRow, confirmCancelRow],
+                components: [difficultyRow, timeCompletionRow, userRoleRow, eligibleCompositionRow, confirmCancelRow]
             });
 
             // Temporary storage for dungeon/group values
@@ -228,6 +231,7 @@ module.exports = {
             });
 
             dungeonCollector.on("collect", async (i) => {
+                console.log('i', i);
                 if (i.customId === "difficulty") {
                     dungeonDifficulty = `${difficultyPrefix}${i.values[0]}`;
                     mainObject.embedData.dungeonDifficulty = dungeonDifficulty;
@@ -335,19 +339,11 @@ module.exports = {
                         });
 
                         await i.update({
-                            content: `**Please ensure applying members are __from NoP__ and __use the passphrase__ in-game!**\nThe passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\``,
+                            content: `**Please ensure applying members are __from ${interaction.guild.name}__ and __use the passphrase__ in-game!**\nThe passphrase for the dungeon is: \`${mainObject.utils.passphrase.phrase}\``,
                             components: [],
                         });
 
                         await sendEmbed(mainObject, currentChannel, updatedDungeonCompositionList);
-
-                        // Send the created dungeon status to the database
-                        await interactionStatusTable.create({
-                            interaction_id: interaction.id,
-                            interaction_user: interaction.user.id,
-                            interaction_status: "created",
-                            command_used: "lfg",
-                        });
 
                         dungeonCollector.stop("confirmCreation");
                     }
@@ -362,22 +358,8 @@ module.exports = {
                         content: "LFG timed out! Please use /lfg again to create a new group.",
                         components: [],
                     });
-
-                    interactionStatusTable.create({
-                        interaction_id: interaction.id,
-                        interaction_user: interaction.user.id,
-                        interaction_status: "timeoutBeforeCreation",
-                        command_used: "lfg",
-                    });
                 } else if (reason === "cancelled") {
                     await createStatusEmbed("LFG cancelled by the user.", dungeonResponse);
-
-                    interactionStatusTable.create({
-                        interaction_id: interaction.id,
-                        interaction_user: interaction.user.id,
-                        interaction_status: "cancelled",
-                        command_used: "lfg",
-                    });
                 }
             });
         } catch (e) {

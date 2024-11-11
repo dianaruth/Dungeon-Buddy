@@ -1,5 +1,3 @@
-const { errorTable } = require("./loadDb");
-
 async function processError(error, interaction) {
     console.log(error);
     let errorName = "";
@@ -21,27 +19,11 @@ async function processError(error, interaction) {
         // Optionally send a message to the user if the error is different
         await interaction.editReply({
             content:
-                "An error occurred while processing your request.\nIf this was a mistake, feel free to ping <@268396301928890369> in <#1090020015589294132>",
+                "An error occurred while processing your request.\nIf this was a mistake, feel free to ping <@351866525537271818> in <#1301296398796455996>",
             ephemeral: true,
             components: [],
         });
     }
-
-    // Send the error to the database
-    await errorTable.create({
-        error_name: errorName || error.name,
-        error_message: error.message,
-        user_id: interaction.user.id,
-    });
-}
-
-async function processSendEmbedError(error, reason, userId) {
-    // Send the error to the database
-    await errorTable.create({
-        error_name: reason,
-        error_message: error.message,
-        user_id: userId,
-    });
 }
 
 let deleteTimeouts = new Map();
@@ -75,4 +57,4 @@ async function createStatusEmbed(statusMessage, embedMessage) {
     deleteTimeouts.set(embedMessage.id, timeout);
 }
 
-module.exports = { processError, processSendEmbedError, createStatusEmbed };
+module.exports = { processError, createStatusEmbed };

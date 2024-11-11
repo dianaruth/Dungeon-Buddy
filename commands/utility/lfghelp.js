@@ -5,11 +5,7 @@ Post any issues in <#1194741620441096332>
 
 \`/lfg\` is used to create a group for the dungeon. Choose desired dungeon > dungeon difficulty > timed/completed > your role > required roles.
 
-\`/lfgquick\` is used to quickly create a group using a *quick string*. Example: \`fall 15t d hdd\` (Type \`/lfgquick\` and enter \`help\` for a detailed breakdown of this command).
-
-\`/lfghistory\` is used to check up-to 10 of your latest groups. Previous teammates & passphrases can be found here.
-
-\`/lfgstats\` is used to check total groups created, groups created in the last 24h, 7d, 30d & also the most popular dungeons for each key range.
+\`/lfgquick\` is used to quickly create a group using a *quick string*. Example: \`gb 8t t hdd\` (Type \`/lfgquick\` and enter \`help\` for a detailed breakdown of this command).
 
 Info:
 - A generated \`listed_as\` group name will be supplied for you. It contains a random two-letter suffix to assist members in finding your group in-game
