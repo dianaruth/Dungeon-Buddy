@@ -8,8 +8,8 @@
     "scripts": {
         "dev": "node index.js NODE_ENV=development",
         "register:dev": "node deploy-commands.js NODE_ENV=development",
-        "register:prod": "node deploy-commands.js NODE_ENV=production",
-        "prod": "node index.js NODE_ENV=production"
+        "register:prod": "node deploy-commands.js",
+        "prod": "node index.js"
     },
     "dependencies": {
         "@npmcli/fs": "^4.0.0",

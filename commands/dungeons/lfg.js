@@ -58,6 +58,7 @@ module.exports = {
         // Timeout for the interaction collector
         const timeout = 90_000;
 
+        // TODO: only work in m+ channels
         // Parse key levels from the channel name
         const currentChannel = interaction.channel;
         const channelName = currentChannel.name;

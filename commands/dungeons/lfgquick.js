@@ -81,6 +81,7 @@ module.exports = {
                 return;
             }
 
+            // TODO: only work in m+ channels
             // Parse key levels from the channel name
             const currentChannel = interaction.channel;
             const channelName = currentChannel.name;
