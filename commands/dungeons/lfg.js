@@ -58,10 +58,10 @@ module.exports = {
         // Timeout for the interaction collector
         const timeout = 90_000;
 
+        // TODO: only work in m+ channels
         // Parse key levels from the channel name
         const currentChannel = interaction.channel;
-        // const channelName = currentChannel.name;
-        channelName = "m0-to-m4"
+        const channelName = currentChannel.name;
         const channelNameSplit = channelName.split("-");
         console.log(channelName);
         const isSingularKeyLevel = channelNameSplit.length === 1;
