@@ -6,9 +6,10 @@
         "node": ">=18.x"
     },
     "scripts": {
-        "start": "node app.js",
-        "register": "node deploy-commands.js",
-        "dev": "nodemon app.js"
+        "dev": "node index.js NODE_ENV=development",
+        "register:dev": "node deploy-commands.js NODE_ENV=development",
+        "register:prod": "node deploy-commands.js NODE_ENV=production",
+        "run:prod": "node index.js NODE_ENV=production"
     },
     "dependencies": {
         "@npmcli/fs": "^4.0.0",
