@@ -62,8 +62,16 @@ module.exports = {
         // Parse key levels from the channel name
         const currentChannel = interaction.channel;
         const channelName = currentChannel.name;
+        const validChannelName = channelName.match(/(m\d+)+(-to-m\d+)*/g);
+
+        if (!validChannelName) {
+            await interaction.reply({
+                content: 'This bot should only be used in the LFG section of the discord in the specific key level channels (m0, m2-to-m6, etc.)',
+                ephemeral: true
+            });
+            return;
+        }
         const channelNameSplit = channelName.split("-");
-        console.log(channelName);
         const isSingularKeyLevel = channelNameSplit.length === 1;
 
         const lowerDifficultyRange = parseInt(channelNameSplit[0].replace("m", ""));
@@ -83,8 +91,6 @@ module.exports = {
         for (let i = lowerDifficultyRange; i <= upperDifficultyRange; i++) {
             dungeonDifficultyRanges.push(i);
         }
-
-        console.log(dungeonDifficultyRanges);
 
         function getSelectDifficultyRow(difficultyPlaceholder) {
             const getSelectDifficulty = new StringSelectMenuBuilder()
@@ -231,7 +237,6 @@ module.exports = {
             });
 
             dungeonCollector.on("collect", async (i) => {
-                console.log('i', i);
                 if (i.customId === "difficulty") {
                     dungeonDifficulty = `${difficultyPrefix}${i.values[0]}`;
                     mainObject.embedData.dungeonDifficulty = dungeonDifficulty;

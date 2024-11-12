@@ -1,5 +1,4 @@
 async function processError(error, interaction) {
-    console.log(error);
     let errorName = "";
     // Check if the error is due to a timeout
     if (
